@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Lottery</title>
+	<script src="../public/js/angular.js"></script>
+	<script src="../public/js/sockjs.min.js"></script>
+	<script src="../public/js/stomp.min.js"></script>
+	<script src="../public/js/lottery.js"></script>
+</head>
+<body ng-controller="LotteryController">
+	<b>近20期开奖结果</b><hr/>
+	<table>
+		<tr>
+			<th style="-webkit-column-width: 150px;">期号</th>
+			<th style="-webkit-column-width: 100px">开奖号码</th>
+			<th>开奖时间</th>
+		</tr>
+		<tr ng-repeat="lotteryInfo in lotteryInfos track by lotteryInfo.issueNo">
+			<td style="text-align: center;">{{lotteryInfo.issueNo}}</td>
+			<td style="text-align: center;">{{lotteryInfo.number}}</td>
+			<td>{{lotteryInfo.date}}</td>
+		</tr>
+	</table>
+	<hr/>
+	<b>下一期预测结果：</b>
+</body>
+</html>
