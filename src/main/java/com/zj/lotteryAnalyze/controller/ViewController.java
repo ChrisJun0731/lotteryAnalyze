@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Administrator on 2018/1/24.
  */
 @Controller
-public class ViewController {
+public class  ViewController {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpServletRequest req, HttpServletResponse resp) {
 		return new ModelAndView("index", "name", "welcome");
