@@ -16,16 +16,23 @@ import java.util.*;
 public class YiYuanHistory {
 
 	public static void main(String[] args) {
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.set(2018, 0, 20, 24, 0,0);
-////		calendar.set(Calendar.DATE, -1);
-//		String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(calendar.getTimeInMillis());
-//		String body = getYiYuanHistory(date);
-//		System.out.println(body);
-////		System.out.println(date);
+		//test1
+//		String result = getYiYuanHistory("2018-01-28 21:15:00");
+//		System.out.println(result);
+
+		//test2
+//		List<LotteryInfo> lotteryInfos = getLotteryHistory(Calendar.getInstance());
+//		for(LotteryInfo lotteryInfo: lotteryInfos){
+//			System.out.println(lotteryInfo.getDate() + ": " + lotteryInfo.getIssueNo() + " number is: " + lotteryInfo.getNumber());
+//		}
+
+		//test3
+//		List<List<LotteryInfo>> list = getLotteryHisOfDays(3);
+
+
 	}
 
-	public String getYiYuanHistory(String date) {
+	protected String getYiYuanHistory(String date) {
 		String host = "https://ali-lottery.showapi.com";
 		String path = "/multi";
 		String method = "GET";
@@ -67,15 +74,18 @@ public class YiYuanHistory {
 	 * @param c 日期
 	 * @return 彩票开奖历史
 	 */
-	public List<LotteryInfo> getLotteryHistory(Calendar c){
+	protected List<LotteryInfo> getLotteryHistory(Calendar c){
 
 		List<LotteryInfo> lotteryInfos = new ArrayList<>();
 
 		String jsonStr = getYiYuanHistory(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(c.getTimeInMillis()));
 		System.out.println("打印从api返回的数据:" + jsonStr);
+
 		JSONObject obj = JSONObject.fromObject(jsonStr);
 		JSONObject body = (JSONObject)obj.get("showapi_res_body");
 		JSONArray list = (JSONArray)body.get("result");
+		System.out.println("彩票的期数为:" + list.size());
+
 		for(Object lottery: list){
 			LotteryInfo info = new LotteryInfo();
 			String expect = (String)((JSONObject) lottery).get("expect");
@@ -84,10 +94,10 @@ public class YiYuanHistory {
 			info.setIssueNo(expect);
 			info.setDate(time);
 			info.setNumber(openCode);
-			list.add(info);
+			lotteryInfos.add(info);
 		}
 
-		return list;
+		return lotteryInfos;
 
 	}
 
@@ -96,7 +106,7 @@ public class YiYuanHistory {
 	 * @param num 天数
 	 * @return 日期列表
 	 */
-	public List<Calendar> createCalendarList(int num){
+	private List<Calendar> createCalendarList(int num){
 
 		List<Calendar> list = new ArrayList();
 
@@ -119,10 +129,9 @@ public class YiYuanHistory {
 		List<Calendar> cList = createCalendarList(num);
 
 		for(Calendar c: cList){
-			List<LotteryInfo> lotteryInfos = new ArrayList<>();
-			lotteryInfos = getLotteryHistory(c);
+			List<LotteryInfo> lotteryInfos = getLotteryHistory(c);
 			list.add(lotteryInfos);
-		}
+	}
 
 		return list;
 	}

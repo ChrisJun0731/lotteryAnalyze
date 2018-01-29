@@ -8,6 +8,23 @@ public class LotteryInfo {
 	private String number;
 	private String date;
 
+	private String[] convertToPerNumStr(){
+		String[] perNum = number.split(",");
+		return perNum;
+	}
+
+	public int[] convertToPerNum(){
+
+		int[] perNum = new int[5];
+		String[] perNumStr = convertToPerNumStr();
+
+		for(int i=0; i<perNumStr.length; i++){
+			perNum[i] = Integer.parseInt(perNumStr[i]);
+		}
+
+		return perNum;
+	}
+
 	public String getDate() {
 		return date;
 	}
