@@ -10,11 +10,20 @@ app.controller('LotteryController', function($scope){
         stompClient.connect({}, function(frame){
             //订阅彩票消息
             stompClient.subscribe('/topic/lotteryInfo', function(result){
-                console.log('callback is called');
+                console.log('subscribe /topic/lotteryInfo');
                 $scope.lotteryInfos = JSON.parse(result.body);
                 $scope.$apply();
             });
+
+            stompClient.subscribe('/topic/stat', function(result){
+                console.log('subscribe /topic/stat');
+                $scope.stats = JSON.parse(result.body);
+                console.log($scope.status);
+                $scope.$apply();
+            });
+
         });
+
     };
 
     $scope.connect();

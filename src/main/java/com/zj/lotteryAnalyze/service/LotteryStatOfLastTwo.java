@@ -3,13 +3,14 @@ package com.zj.lotteryAnalyze.service;
 import com.zj.lotteryAnalyze.aliyunApi.YiYuanHistory;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
 import com.zj.lotteryAnalyze.utils.MyUtil;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Administrator on 2018/1/26.
  */
+@Service
 public class LotteryStatOfLastTwo {
 
 	private YiYuanHistory yiYuanHistory = new YiYuanHistory();
@@ -19,10 +20,10 @@ public class LotteryStatOfLastTwo {
 	 * @param lotteryInfos
 	 * @return
 	 */
-	public int[][] countBigNumOfLastTwo(List<LotteryInfo> lotteryInfos){
+	public int[] countBigNumOfLastTwo(List<LotteryInfo> lotteryInfos){
 
 		List<int[]> list = getLastTwoNumber(lotteryInfos);
-		int[][] bigNumTimes = new int[1][2];
+		int[] bigNumTimes = new int[2];
 		int tenBig = 0;
 		int unitBig = 0;
 		for(int[] group: list){
@@ -33,8 +34,8 @@ public class LotteryStatOfLastTwo {
 				unitBig++;
 			}
 		}
-		bigNumTimes[0][0] = tenBig;
-		bigNumTimes[0][1] = unitBig;
+		bigNumTimes[0] = tenBig;
+		bigNumTimes[1] = unitBig;
 
 		return bigNumTimes;
 	}
@@ -54,13 +55,13 @@ public class LotteryStatOfLastTwo {
 			for(int j=0; j<2; j++){
 				//j==0表示每期彩票中的倒数第二个开奖号码
 				if(j == 0){
-					if(lotterys[i][j][1]%2 == 0){
+					if(lotterys[i][j][1]%2 != 0){
 						tenOddTimes++;
 					}
 				}
 				//j==1表示每期彩票中的最后一个开奖号码
 				if(j == 1){
-					if(lotterys[i][j][1]%2 == 0){
+					if(lotterys[i][j][1]%2 != 0){
 						unitOddTimes++;
 					}
 				}
@@ -73,16 +74,57 @@ public class LotteryStatOfLastTwo {
 	}
 
 	/**
-	 * 统计以五进制表示的最后两位数，个位数相同的次数
+	 * 统计以五进制表示的最后两位数，个位数相同的最大次数
 	 * 例如8和3以五进制表示个位上都是3
 	 * @param lotteryInfos
 	 * @return
 	 */
 	public int[] countSameNumQuinaryLast(List<LotteryInfo> lotteryInfos){
 
+		int[][][] lotterys = getLastTwoQuinary(lotteryInfos);
+		Map<Integer, Integer> mapTen = new HashMap<>();
+		Map<Integer, Integer> mapUnit = new HashMap<>();
+		int[] result = new int[2];
+		int sameTimesTen = 0;
+		int sameTimesUnit = 0;
 
+		for(int i=0; i<6; i++){
+			for(int j=0; j<2; j++){
+				if(j == 0){
+					int key = lotterys[i][j][1];
+					if(mapTen.containsKey(key)){
+						mapTen.put(key, mapTen.get(key) + 1);
+					}else{
+						mapTen.put(key, 1);
+					}
+				}
+				if(j == 1){
+					int key = lotterys[i][j][1];
+					if(mapUnit.containsKey(key)){
+						mapUnit.put(key, mapUnit.get(key) + 1);
+					}else{
+						mapUnit.put(key, 1);
+					}
+				}
+			}
+		}
 
-		return null;
+		for(Map.Entry<Integer, Integer> entry: mapTen.entrySet()){
+			if(entry.getValue() > sameTimesTen){
+				sameTimesTen = entry.getValue();
+			}
+		}
+
+		for(Map.Entry<Integer, Integer> entry: mapUnit.entrySet()){
+			if(entry.getValue() > sameTimesUnit){
+				sameTimesUnit = entry.getValue();
+			}
+		}
+
+		result[0] = sameTimesTen;
+		result[1] = sameTimesUnit;
+
+		return result;
 	}
 
 	/**
@@ -92,9 +134,28 @@ public class LotteryStatOfLastTwo {
 	 * @param lotteryInfos
 	 * @return
 	 */
-	public int[][] countDiffQuinary(List<LotteryInfo> lotteryInfos){
+	public int[] countDiffQuinary(List<LotteryInfo> lotteryInfos){
 
-		return null;
+		int[][][] lotterys = getLastTwoQuinary(lotteryInfos);
+		Set<Integer> tenSet = new HashSet<>();
+		Set<Integer> unitSet = new HashSet<>();
+		int[] result = new int[2];
+
+		for(int i=0; i<6; i++){
+			for(int j=0; j<2; j++){
+				if(j == 0){
+					tenSet.add(lotterys[i][j][1]);
+				}
+				if(j == 1){
+					unitSet.add(lotterys[i][j][1]);
+				}
+			}
+		}
+
+		result[0] = tenSet.size();
+		result[1] = unitSet.size();
+
+		return result;
 	}
 
 	/**
@@ -148,8 +209,28 @@ public class LotteryStatOfLastTwo {
 	 * @param lotteryInfos
 	 * @return
 	 */
-	public int[][] lastSumQuinary(List<LotteryInfo> lotteryInfos){
-		return null;
+	public int[] lastSumQuinary(List<LotteryInfo> lotteryInfos){
+
+		int[][][] lotterys = getLastTwoQuinary(lotteryInfos);
+		int sumTen = 0;
+		int unitTen = 0;
+		int[] result = new int[2];
+
+		for(int i=0; i<6; i++){
+			for(int j=0; j<2; j++){
+				if(j == 0){
+					sumTen += lotterys[i][j][1];
+				}
+				if(j == 1){
+					unitTen += lotterys[i][j][1];
+				}
+			}
+		}
+
+		result[0] = sumTen;
+		result[1] = unitTen;
+
+		return result;
 	}
 
 
@@ -159,12 +240,12 @@ public class LotteryStatOfLastTwo {
 	 * @return
 	 */
 	public List<LotteryInfo> getHistoryData(){
-		List<List<LotteryInfo>> list = yiYuanHistory.getLotteryHisOfDays(12);
+		List<List<LotteryInfo>> list = yiYuanHistory.getLotteryHisOfDays(1);
 		List<LotteryInfo> lotteryInfos = new ArrayList<>();
 
 		for(List<LotteryInfo> lotteryInfoList: list){
 			for(LotteryInfo info: lotteryInfoList){
-				lotteryInfoList.add(info);
+				lotteryInfos.add(info);
 			}
 		}
 
