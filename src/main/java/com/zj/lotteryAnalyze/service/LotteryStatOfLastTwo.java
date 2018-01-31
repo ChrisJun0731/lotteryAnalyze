@@ -168,10 +168,10 @@ public class LotteryStatOfLastTwo {
 
 		int[][][] lotterys = getLastTwoQuinary(lotteryInfos);
 		int[] conTimes = new int[2];
-		int tenMaxCon = 0;
-		int unitMaxCon = 0;
-		int tenTemMaxCon = 0;
-		int unitTemMaxCon = 0;
+		int tenMaxCon = 1;
+		int unitMaxCon = 1;
+		int tenTemMaxCon = 1;
+		int unitTemMaxCon = 1;
 
 		for(int i=1; i<6; i++){
 			for(int j=0; j<2; j++){
@@ -260,9 +260,19 @@ public class LotteryStatOfLastTwo {
 	public List<List<LotteryInfo>> groupLotterys(List<LotteryInfo> list){
 
 		List<List<LotteryInfo>> lotteryGroups = new ArrayList<>();
+		int size = list.size();
+		int groupNum = size/6;
 
-		for(int i=0; i<list.size(); i++){
-			List<LotteryInfo> lotteryInfos = null;
+		try{
+			if(size< 6){
+				throw new Exception("彩票的总期数小于6期，无法进行分组");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		List<LotteryInfo> lotteryInfos = null;
+		for(int i=0; i<6*groupNum; i++){
 			if(i%6 == 0){
 				lotteryInfos = new ArrayList<>();
 				lotteryInfos.add(list.get(i));
@@ -305,7 +315,7 @@ public class LotteryStatOfLastTwo {
 		MyUtil util = new MyUtil();
 
 		List<int[]> list = getLastTwoNumber(lotteryInfos);
-		int[][][] lastTwoQuinary = new int[6][2][2];
+		int[][][] lastTwoQuinary = new int[list.size()][2][2];
 
 		for(int i=0; i<list.size(); i++){
 			for(int j=0; j<list.get(i).length; j++){

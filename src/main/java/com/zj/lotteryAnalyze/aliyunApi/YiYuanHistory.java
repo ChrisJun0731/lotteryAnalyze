@@ -79,12 +79,10 @@ public class YiYuanHistory {
 		List<LotteryInfo> lotteryInfos = new ArrayList<>();
 
 		String jsonStr = getYiYuanHistory(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(c.getTimeInMillis()));
-		System.out.println("打印从api返回的数据:" + jsonStr);
 
 		JSONObject obj = JSONObject.fromObject(jsonStr);
 		JSONObject body = (JSONObject)obj.get("showapi_res_body");
 		JSONArray list = (JSONArray)body.get("result");
-		System.out.println("彩票的期数为:" + list.size());
 
 		for(Object lottery: list){
 			LotteryInfo info = new LotteryInfo();
