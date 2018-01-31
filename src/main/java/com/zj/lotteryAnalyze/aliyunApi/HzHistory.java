@@ -104,15 +104,16 @@ public class HzHistory {
 		String issueNo5 = date + "-101";
 		c.add(Calendar.DATE, 1);
 		date = new SimpleDateFormat("yyyyMMdd").format(c.getTimeInMillis());
+		c.add(Calendar.DATE, -1);
 		String issueNo6 = date + "-001";
 
 		List<String> issueNoList = new ArrayList<>();
-		issueNoList.add(issueNo1);
-		issueNoList.add(issueNo2);
-		issueNoList.add(issueNo3);
-		issueNoList.add(issueNo4);
-		issueNoList.add(issueNo5);
 		issueNoList.add(issueNo6);
+		issueNoList.add(issueNo5);
+		issueNoList.add(issueNo4);
+		issueNoList.add(issueNo3);
+		issueNoList.add(issueNo2);
+		issueNoList.add(issueNo1);
 
 		for(String issueNo: issueNoList){
 			List<LotteryInfo> lotteryInfos = getLotteryHistory(issueNo);

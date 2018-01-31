@@ -13,7 +13,7 @@ import java.io.IOException;
 public class FileUtil {
 
 	public void writeJson(String filename, String json){
-		File file = new File("E:\\project\\lotteryAnalyze\\src\\main\\resources\\data\\" + filename);
+		File file = new File("D:\\project\\lotteryAnalyze\\src\\main\\resources\\data\\" + filename);
 		if(!file.exists()){
 			try {
 				file.createNewFile();

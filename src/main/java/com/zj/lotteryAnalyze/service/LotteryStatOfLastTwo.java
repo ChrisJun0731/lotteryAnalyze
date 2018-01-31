@@ -3,10 +3,12 @@ package com.zj.lotteryAnalyze.service;
 import com.zj.lotteryAnalyze.aliyunApi.HzHistory;
 import com.zj.lotteryAnalyze.aliyunApi.YiYuanHistory;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
+import com.zj.lotteryAnalyze.utils.FileUtil;
 import com.zj.lotteryAnalyze.utils.MyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -17,6 +19,12 @@ public class LotteryStatOfLastTwo {
 
 	@Autowired
 	private HzHistory history;
+
+	@Autowired
+	private MyUtil util;
+
+	@Autowired
+	private FileUtil fileUtil;
 
 	/**
 	 * 统计每期中最后两位数是大数的次数
@@ -242,9 +250,23 @@ public class LotteryStatOfLastTwo {
 	 * 获取某天的历史数据，共120期
 	 * @return
 	 */
-	public List<LotteryInfo> getHistoryData(Calendar c){
+	public List<LotteryInfo> getHistoryData(Calendar ...c){
 
-		List<LotteryInfo> list = history.getLotteryOfDate(c);
+		List<LotteryInfo> list = new ArrayList<>();
+
+		for(Calendar calendar: c){
+
+			List<LotteryInfo> info = history.getLotteryOfDate(calendar);
+
+			//把该天的彩票历史数据写在文件中
+			String filename = new SimpleDateFormat("yyyyMMdd").format(calendar.getTimeInMillis()) + ".json";
+			String json = util.convertListToJSON(info);
+			fileUtil.writeJson(filename, json);
+			System.out.println("彩票历史数据写入到"+filename+"文件中成功");
+
+			list.addAll(info);
+		}
+
 		return list;
 	}
 

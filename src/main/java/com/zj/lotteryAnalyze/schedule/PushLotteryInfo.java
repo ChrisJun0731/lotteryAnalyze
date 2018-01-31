@@ -59,8 +59,13 @@ public class PushLotteryInfo {
 
 	public List<Stat> pushStat(){
 
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.DATE, -2);
+		Calendar[] c = new Calendar[2];
+		Calendar c1 = Calendar.getInstance();
+		c1.add(Calendar.DATE, -2);
+		Calendar c2 = Calendar.getInstance();
+		c2.add(Calendar.DATE, -3);
+		c[0] = c1;
+		c[1] = c2;
 		List<LotteryInfo> lotteryInfos = lotteryStat.getHistoryData(c);
 		List<List<LotteryInfo>> groups = lotteryStat.groupLotterys(lotteryInfos);
 		List<Stat> stats = new ArrayList<>();
@@ -75,12 +80,6 @@ public class PushLotteryInfo {
 			stat.setLastSum(lotteryStat.lastSumQuinary(group));
 			stats.add(stat);
 		}
-
-		//把该天的彩票历史数据写在文件中
-		String filename = new SimpleDateFormat("yyyyMMdd").format(c.getTimeInMillis()) + ".json";
-		String json = util.convertListToJSON(lotteryInfos);
-		fileUtil.writeJson(filename, json);
-		System.out.println("彩票历史数据写入到"+filename+"文件中成功");
 
 		return stats;
 	}

@@ -10,51 +10,60 @@
 </head>
 <body ng-controller="LotteryController">
 	<b>近20期开奖结果</b><hr/>
-	<table>
+	<table style="width:50%;">
 		<tr>
-			<th style="-webkit-column-width: 150px;">期号</th>
-			<th style="-webkit-column-width: 100px">开奖号码</th>
+			<th>期号</th>
+			<th>开奖号码</th>
 			<th>开奖时间</th>
 		</tr>
 		<tr ng-repeat="lotteryInfo in lotteryInfos track by lotteryInfo.issueNo">
 			<td style="text-align: center;">{{lotteryInfo.issueNo}}</td>
 			<td style="text-align: center;">{{lotteryInfo.number}}</td>
-			<td>{{lotteryInfo.date}}</td>
+			<td style="text-align: center;">{{lotteryInfo.date}}</td>
 		</tr>
 	</table>
 	<hr/>
 
 	<b>数据统计(六期为一组，五进制)</b>
-	<table>
+	<table style="width:50%;">
 		<tr>
-			<th>组数</th>
-			<th>十位大</th>
-			<th>个位大</th>
-			<th>十位末位奇</th>
-			<th>个位末位奇</th>
-			<th>十位末同</th>
-			<th>个位末同</th>
-			<th>十位末不同</th>
-			<th>个位末不同</th>
-			<th>十位末连同</th>
-			<th>个位末连同</th>
-			<th>十位末和</th>
-			<th>个位末和</th>
+			<th></th>
+			<th colspan="2">出现大数次数</th>
+			<th colspan="2">末位奇数次数</th>
+			<th colspan="2">末位值相同最大次数</th>
+			<th colspan="2">末位不同值个数</th>
+			<th colspan="2">末位连续相同次数</th>
+			<th colspan="2">末位和</th>
+		</tr>
+		<tr>
+			<th>组序号</th>
+			<th>十位</th>
+			<th>个位</th>
+			<th>十位</th>
+			<th>个位</th>
+			<th>十位</th>
+			<th>个位</th>
+			<th>十位</th>
+			<th>个位</th>
+			<th>十位</th>
+			<th>个位</th>
+			<th>十位</th>
+			<th>个位</th>
 		</tr>
 		<tr ng-repeat="stat in stats track by $index">
-			<td>第{{$index}}组</td>
-			<td>{{stat.bigNumTimes[0]}}</td>
-			<td>{{stat.bigNumTimes[1]}}</td>
-			<td>{{stat.oddNumTimes[0]}}</td>
-			<td>{{stat.oddNumTimes[1]}}</td>
-			<td>{{stat.sameNumTimes[0]}}</td>
-			<td>{{stat.sameNumTimes[1]}}</td>
-			<td>{{stat.diffNums[0]}}</td>
-			<td>{{stat.diffNums[1]}}</td>
-			<td>{{stat.sameConTimes[0]}}</td>
-			<td>{{stat.sameConTimes[1]}}</td>
-			<td>{{stat.lastSum[0]}}</td>
-			<td>{{stat.lastSum[1]}}</td>
+			<td style="text-align:center;">第{{$index+1}}组</td>
+			<td style="text-align:center;">{{stat.bigNumTimes[0]}}</td>
+			<td style="text-align:center;">{{stat.bigNumTimes[1]}}</td>
+			<td style="text-align:center;">{{stat.oddNumTimes[0]}}</td>
+			<td style="text-align:center;">{{stat.oddNumTimes[1]}}</td>
+			<td style="text-align:center;">{{stat.sameNumTimes[0]}}</td>
+			<td style="text-align:center;">{{stat.sameNumTimes[1]}}</td>
+			<td style="text-align:center;">{{stat.diffNums[0]}}</td>
+			<td style="text-align:center;">{{stat.diffNums[1]}}</td>
+			<td style="text-align:center;">{{stat.sameConTimes[0]}}</td>
+			<td style="text-align:center;">{{stat.sameConTimes[1]}}</td>
+			<td style="text-align:center;">{{stat.lastSum[0]}}</td>
+			<td style="text-align:center;">{{stat.lastSum[1]}}</td>
 		</tr>
 	</table>
 	<hr/>
