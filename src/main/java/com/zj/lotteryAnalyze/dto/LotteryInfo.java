@@ -9,7 +9,7 @@ public class LotteryInfo {
 	private String date;
 
 	private String[] convertToPerNumStr(){
-		String[] perNum = number.split(",");
+		String[] perNum = number.split(" ");
 		return perNum;
 	}
 

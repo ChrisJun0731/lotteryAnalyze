@@ -6,17 +6,23 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Administrator on 2018/1/26.
  */
+@Service
 public class HzHistory {
-	public String getHzLotteryHistory() {
+
+	/**
+	 * 获取issueNo之前的20期历史数据
+	 * @param issueNo
+	 * @return 字符串
+	 */
+	public String getHzLotteryHistory(String issueNo) {
 		String host = "http://jisucpkj.market.alicloudapi.com";
 		String path = "/caipiao/history";
 		String method = "GET";
@@ -27,7 +33,7 @@ public class HzHistory {
 		Map<String, String> querys = new HashMap<String, String>();
 		//充实时时彩 73
 		querys.put("caipiaoid", "73");
-//		querys.put("issueno", "2014127");
+		querys.put("issueno", issueNo);
 		querys.put("num", "20");
 
 		String resBody = null;
@@ -46,17 +52,23 @@ public class HzHistory {
 			//获取response的body
 			//System.out.println(EntityUtils.toString(response.getEntity()));
 			resBody = EntityUtils.toString(response.getEntity());
+			System.out.println("打印从api返回的数据"+resBody);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resBody;
 	}
 
-	public List<LotteryInfo> getLotteryHistory(){
+	/**
+	 * 获取issueNo之前的20期彩票数据
+	 * @param issueNo
+	 * @return List<LotteryInfo>
+	 */
+	public List<LotteryInfo> getLotteryHistory(String issueNo){
 
 		List<LotteryInfo> lotteryInfos = new ArrayList<>();
 
-		String jsonStr = getHzLotteryHistory();
+		String jsonStr = getHzLotteryHistory(issueNo);
 		JSONObject obj = JSONObject.fromObject(jsonStr);
 		JSONObject result = (JSONObject)obj.get("result");
 		JSONArray list = (JSONArray)result.get("list");
@@ -73,5 +85,40 @@ public class HzHistory {
 		}
 
 		return lotteryInfos;
+	}
+
+	/**
+	 * 获取某一天的彩票历史数据
+	 * 时时彩每天120期
+	 * @param c
+	 * @return
+	 */
+	public List<LotteryInfo> getLotteryOfDate(Calendar c){
+
+		List<LotteryInfo> list = new ArrayList<>();
+		String date = new SimpleDateFormat("yyyyMMdd").format(c.getTimeInMillis());
+		String issueNo1 = date + "-021";
+		String issueNo2 = date + "-041";
+		String issueNo3 = date + "-061";
+		String issueNo4 = date + "-081";
+		String issueNo5 = date + "-101";
+		c.add(Calendar.DATE, 1);
+		date = new SimpleDateFormat("yyyyMMdd").format(c.getTimeInMillis());
+		String issueNo6 = date + "-001";
+
+		List<String> issueNoList = new ArrayList<>();
+		issueNoList.add(issueNo1);
+		issueNoList.add(issueNo2);
+		issueNoList.add(issueNo3);
+		issueNoList.add(issueNo4);
+		issueNoList.add(issueNo5);
+		issueNoList.add(issueNo6);
+
+		for(String issueNo: issueNoList){
+			List<LotteryInfo> lotteryInfos = getLotteryHistory(issueNo);
+			list.addAll(lotteryInfos);
+		}
+
+		return list;
 	}
 }

@@ -1,8 +1,14 @@
 package com.zj.lotteryAnalyze.utils;
 
+import com.zj.lotteryAnalyze.dto.LotteryInfo;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/1/29.
  */
+@Component
 public class MyUtil {
 
 	/**
@@ -18,5 +24,19 @@ public class MyUtil {
 		result[1] = num%5;
 
 		return result;
+	}
+
+	/**
+	 * 将一个彩票List转换为
+	 * @param lotteryInfos
+	 */
+	public String convertListToJSON(List<LotteryInfo> lotteryInfos){
+		String json = "[";
+		for(LotteryInfo info: lotteryInfos){
+			json += "{\"issueNo\":\""+ info.getIssueNo()+ "\",\"number\":\""+ info.getNumber() + "\"},";
+		}
+		json = json.substring(0, json.length()-1);
+		json += "]";
+		return json;
 	}
 }

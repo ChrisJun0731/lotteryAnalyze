@@ -1,8 +1,10 @@
 package com.zj.lotteryAnalyze.service;
 
+import com.zj.lotteryAnalyze.aliyunApi.HzHistory;
 import com.zj.lotteryAnalyze.aliyunApi.YiYuanHistory;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
 import com.zj.lotteryAnalyze.utils.MyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,7 +15,8 @@ import java.util.*;
 @Service
 public class LotteryStatOfLastTwo {
 
-	private YiYuanHistory yiYuanHistory = new YiYuanHistory();
+	@Autowired
+	private HzHistory history;
 
 	/**
 	 * 统计每期中最后两位数是大数的次数
@@ -236,20 +239,13 @@ public class LotteryStatOfLastTwo {
 
 	/**
 	 * 获取数据源
-	 * 12天数据，每天50期，共600期数据
+	 * 获取某天的历史数据，共120期
 	 * @return
 	 */
-	public List<LotteryInfo> getHistoryData(){
-		List<List<LotteryInfo>> list = yiYuanHistory.getLotteryHisOfDays(1);
-		List<LotteryInfo> lotteryInfos = new ArrayList<>();
+	public List<LotteryInfo> getHistoryData(Calendar c){
 
-		for(List<LotteryInfo> lotteryInfoList: list){
-			for(LotteryInfo info: lotteryInfoList){
-				lotteryInfos.add(info);
-			}
-		}
-
-		return lotteryInfos;
+		List<LotteryInfo> list = history.getLotteryOfDate(c);
+		return list;
 	}
 
 	/**

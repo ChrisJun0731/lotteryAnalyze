@@ -24,25 +24,40 @@
 	</table>
 	<hr/>
 
-	<b>数据统计</b>
+	<b>数据统计(六期为一组，五进制)</b>
 	<table>
 		<tr>
-			<th>组数(每6期为一组)</th>
-			<th>十位大数次数</th>
-			<th>个位大数次数</th>
-			<th>十位末位奇次数（五进制）</th>
-			<th>个位末位奇次数（五进制）</th>
-			<th>十位的末位不同次数（五进制）</th>
-			<th>个位的末位不同次数（五进制）</th>
-			<th>十位末位连续相同次数（五进制）</th>
-			<th>个位末位连续相同次数（五进制）</th>
-			<th>十位的末位和（五进制）</th>
-			<th>个位的末位和（五进制）</th>
+			<th>组数</th>
+			<th>十位大</th>
+			<th>个位大</th>
+			<th>十位末位奇</th>
+			<th>个位末位奇</th>
+			<th>十位末同</th>
+			<th>个位末同</th>
+			<th>十位末不同</th>
+			<th>个位末不同</th>
+			<th>十位末连同</th>
+			<th>个位末连同</th>
+			<th>十位末和</th>
+			<th>个位末和</th>
 		</tr>
-		<tr>
-
+		<tr ng-repeat="stat in stats track by $index">
+			<td>第{{$index}}组</td>
+			<td>{{stat.bigNumTimes[0]}}</td>
+			<td>{{stat.bigNumTimes[1]}}</td>
+			<td>{{stat.oddNumTimes[0]}}</td>
+			<td>{{stat.oddNumTimes[1]}}</td>
+			<td>{{stat.sameNumTimes[0]}}</td>
+			<td>{{stat.sameNumTimes[1]}}</td>
+			<td>{{stat.diffNums[0]}}</td>
+			<td>{{stat.diffNums[1]}}</td>
+			<td>{{stat.sameConTimes[0]}}</td>
+			<td>{{stat.sameConTimes[1]}}</td>
+			<td>{{stat.lastSum[0]}}</td>
+			<td>{{stat.lastSum[1]}}</td>
 		</tr>
 	</table>
+	<hr/>
 	<b>下一期预测结果：</b>
 </body>
 </html>

@@ -1,18 +1,23 @@
 package com.zj.lotteryAnalyze.schedule;
 
+import com.zj.lotteryAnalyze.aliyunApi.HzHistory;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
 import com.zj.lotteryAnalyze.dto.Stat;
-import com.zj.lotteryAnalyze.service.LotteryHistory;
 import com.zj.lotteryAnalyze.service.LotteryStatOfLastTwo;
+import com.zj.lotteryAnalyze.utils.FileUtil;
+import com.zj.lotteryAnalyze.utils.MyUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -22,7 +27,13 @@ import java.util.List;
 public class PushLotteryInfo {
 
 	@Autowired
-	private LotteryHistory history;
+	private HzHistory history;
+
+	@Autowired
+	private MyUtil util;
+
+	@Autowired
+	private FileUtil fileUtil;
 
 	@Autowired
 	private LotteryStatOfLastTwo lotteryStat;
@@ -36,18 +47,7 @@ public class PushLotteryInfo {
 		System.out.println("开始推送数据");
 
 		List<LotteryInfo> lotteryInfos = new ArrayList<LotteryInfo>();
-		String jsonStr = history.getLotteryHistory();
-		JSONObject jsonObj = JSONObject.fromObject(jsonStr);
-		JSONObject result = (JSONObject)jsonObj.get("result");
-		JSONArray list = (JSONArray) result.get("list");
-
-		for(Object obj: list){
-			LotteryInfo info = new LotteryInfo();
-			info.setIssueNo((String)((JSONObject)obj).get("issueno"));
-			info.setNumber((String)((JSONObject)obj).get("number"));
-			info.setDate((String)((JSONObject)obj).get("opendate"));
-			lotteryInfos.add(info);
-		}
+		lotteryInfos = history.getLotteryHistory(null);
 
 		List<Stat> stats = pushStat();
 
@@ -59,7 +59,9 @@ public class PushLotteryInfo {
 
 	public List<Stat> pushStat(){
 
-		List<LotteryInfo> lotteryInfos = lotteryStat.getHistoryData();
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DATE, -2);
+		List<LotteryInfo> lotteryInfos = lotteryStat.getHistoryData(c);
 		List<List<LotteryInfo>> groups = lotteryStat.groupLotterys(lotteryInfos);
 		List<Stat> stats = new ArrayList<>();
 
@@ -73,6 +75,12 @@ public class PushLotteryInfo {
 			stat.setLastSum(lotteryStat.lastSumQuinary(group));
 			stats.add(stat);
 		}
+
+		//把该天的彩票历史数据写在文件中
+		String filename = new SimpleDateFormat("yyyyMMdd").format(c.getTimeInMillis()) + ".json";
+		String json = util.convertListToJSON(lotteryInfos);
+		fileUtil.writeJson(filename, json);
+		System.out.println("彩票历史数据写入到"+filename+"文件中成功");
 
 		return stats;
 	}

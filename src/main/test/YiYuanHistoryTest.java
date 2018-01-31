@@ -11,7 +11,7 @@ public class YiYuanHistoryTest {
 
 	public static void main(String[] args){
 		YiYuanHistory history = new YiYuanHistory();
-		List<List<LotteryInfo>> list = history.getLotteryHisOfDays(10);
+		List<List<LotteryInfo>> list = history.getLotteryHisOfDays(1);
 
 //		List<LotteryInfo> lotteryInfos = history.getLotteryHistory(list);
 //		System.out.println(lotteryInfos.size());

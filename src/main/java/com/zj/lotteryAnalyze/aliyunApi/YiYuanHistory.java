@@ -62,7 +62,7 @@ public class YiYuanHistory {
 			//获取response的body
 			//System.out.println(EntityUtils.toString(response.getEntity()));
 			resBody = EntityUtils.toString(response.getEntity());
-
+			System.out.println("从api获取的返回结果为："+ resBody);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -112,9 +112,9 @@ public class YiYuanHistory {
 			Calendar c = Calendar.getInstance();
 			int year = c.get(Calendar.YEAR);
 			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
+			int day = c.get(Calendar.DATE);
 			c.set(year, month, day, 24, 0, 0);
-			c.add(Calendar.DATE, -i);
+			c.add(Calendar.DATE, -(i+1));
 			list.add(c);
 		}
 

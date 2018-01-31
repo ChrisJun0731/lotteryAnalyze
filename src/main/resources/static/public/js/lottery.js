@@ -18,7 +18,7 @@ app.controller('LotteryController', function($scope){
             stompClient.subscribe('/topic/stat', function(result){
                 console.log('subscribe /topic/stat');
                 $scope.stats = JSON.parse(result.body);
-                console.log($scope.status);
+                console.log($scope.stats);
                 $scope.$apply();
             });
 
