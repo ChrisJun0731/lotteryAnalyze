@@ -3,6 +3,8 @@ package com.zj.lotteryAnalyze.utils;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -38,5 +40,18 @@ public class MyUtil {
 		json = json.substring(0, json.length()-1);
 		json += "]";
 		return json;
+	}
+
+	public List<Calendar> createCalendars(int days){
+
+		List<Calendar> list = new ArrayList<>();
+
+		for(int i=2; i<days+2; i++){
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, -i);
+			list.add(c);
+		}
+
+		return list;
 	}
 }

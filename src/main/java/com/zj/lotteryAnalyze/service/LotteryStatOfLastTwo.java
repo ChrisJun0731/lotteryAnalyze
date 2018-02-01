@@ -3,6 +3,7 @@ package com.zj.lotteryAnalyze.service;
 import com.zj.lotteryAnalyze.aliyunApi.HzHistory;
 import com.zj.lotteryAnalyze.aliyunApi.YiYuanHistory;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
+import com.zj.lotteryAnalyze.dto.RatioStat;
 import com.zj.lotteryAnalyze.utils.FileUtil;
 import com.zj.lotteryAnalyze.utils.MyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,11 +251,11 @@ public class LotteryStatOfLastTwo {
 	 * 获取某天的历史数据，共120期
 	 * @return
 	 */
-	public List<LotteryInfo> getHistoryData(Calendar ...c){
+	public List<LotteryInfo> getHistoryData(List<Calendar> calendars){
 
 		List<LotteryInfo> list = new ArrayList<>();
 
-		for(Calendar calendar: c){
+		for(Calendar calendar: calendars){
 
 			List<LotteryInfo> info = history.getLotteryOfDate(calendar);
 
@@ -344,4 +345,18 @@ public class LotteryStatOfLastTwo {
 		return lastTwoQuinary;
 	}
 
+	/**
+	 * 计算多期彩票中，分组后，按不同的统计方式，每个值在组出现的概率
+	 * @param lotteryInfos
+	 * @return
+	 */
+	public Map<String, RatioStat> computeRate(List<LotteryInfo> lotteryInfos){
+
+		return null;
+	}
+
+	public RatioStat computeBigNumRate(List<LotteryInfo> lotteryInfos) {
+
+		return null;
+	}
 }

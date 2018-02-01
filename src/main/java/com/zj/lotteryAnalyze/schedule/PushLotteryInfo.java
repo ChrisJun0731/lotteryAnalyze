@@ -59,14 +59,8 @@ public class PushLotteryInfo {
 
 	public List<Stat> pushStat(){
 
-		Calendar[] c = new Calendar[2];
-		Calendar c1 = Calendar.getInstance();
-		c1.add(Calendar.DATE, -2);
-		Calendar c2 = Calendar.getInstance();
-		c2.add(Calendar.DATE, -3);
-		c[0] = c1;
-		c[1] = c2;
-		List<LotteryInfo> lotteryInfos = lotteryStat.getHistoryData(c);
+		List<Calendar> calendars = util.createCalendars(5);
+		List<LotteryInfo> lotteryInfos = lotteryStat.getHistoryData(calendars);
 		List<List<LotteryInfo>> groups = lotteryStat.groupLotterys(lotteryInfos);
 		List<Stat> stats = new ArrayList<>();
 
