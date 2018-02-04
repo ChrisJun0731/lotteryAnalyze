@@ -18,11 +18,10 @@ public class LotteryStatTest {
 			String number = "";
 			for(int j=0; j<5; j++){
 				int random = (int)(Math.random()*10);
-				number += String.valueOf(random) + ",";
+				number += String.valueOf(random) + " ";
 			}
 			number = number.substring(0, number.length() - 1);
 			info.setNumber(number);
-//			info.setNumber("1,2,3,4,5");
 			lotteryInfos.add(info);
 		}
 		System.out.println("打印这组彩票：");

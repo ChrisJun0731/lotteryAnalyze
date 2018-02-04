@@ -72,16 +72,18 @@ public class HzHistory {
 		JSONObject obj = JSONObject.fromObject(jsonStr);
 		JSONObject result = (JSONObject)obj.get("result");
 		JSONArray list = (JSONArray)result.get("list");
-		for(Object lottery: list){
-			LotteryInfo info = new LotteryInfo();
+		if(list != null){
+			for(Object lottery: list){
+				LotteryInfo info = new LotteryInfo();
 
-			String issueno = (String)((JSONObject) lottery).get("issueno");
-			String opendate = (String) ((JSONObject) lottery).get("opendate");
-			String number = (String) ((JSONObject) lottery).get("number");
-			info.setDate(opendate);
-			info.setIssueNo(issueno);
-			info.setNumber(number);
-			lotteryInfos.add(info);
+				String issueno = (String)((JSONObject) lottery).get("issueno");
+				String opendate = (String) ((JSONObject) lottery).get("opendate");
+				String number = (String) ((JSONObject) lottery).get("number");
+				info.setDate(opendate);
+				info.setIssueNo(issueno);
+				info.setNumber(number);
+				lotteryInfos.add(info);
+			}
 		}
 
 		return lotteryInfos;
@@ -90,7 +92,7 @@ public class HzHistory {
 	/**
 	 * 获取某一天的彩票历史数据
 	 * 时时彩每天120期
-	 * @param c
+	 * @param c                                                                                             88888888888888888888888888888888888888888888888888888888888888888888888888888888888 vb                              c
 	 * @return
 	 */
 	public List<LotteryInfo> getLotteryOfDate(Calendar c){

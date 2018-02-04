@@ -2,7 +2,9 @@ package com.zj.lotteryAnalyze.schedule;
 
 import com.zj.lotteryAnalyze.aliyunApi.HzHistory;
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
+import com.zj.lotteryAnalyze.dto.RatioStat;
 import com.zj.lotteryAnalyze.dto.Stat;
+import com.zj.lotteryAnalyze.service.LotteryRatioStat;
 import com.zj.lotteryAnalyze.service.LotteryStatOfLastTwo;
 import com.zj.lotteryAnalyze.utils.FileUtil;
 import com.zj.lotteryAnalyze.utils.MyUtil;
@@ -19,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/1/25.
@@ -39,6 +42,9 @@ public class PushLotteryInfo {
 	private LotteryStatOfLastTwo lotteryStat;
 
 	@Autowired
+	private LotteryRatioStat ratioStat;
+
+	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 
 	@Scheduled(cron="0 1/1 * * * ?")
@@ -46,21 +52,24 @@ public class PushLotteryInfo {
 	public String pushLotteryInfo(){
 		System.out.println("开始推送数据");
 
+		//推送近20期开奖号码
 		List<LotteryInfo> lotteryInfos = new ArrayList<LotteryInfo>();
 		lotteryInfos = history.getLotteryHistory(null);
 
-		List<Stat> stats = pushStat();
+		//根据过去的数据，推送统计数据
+		List<Calendar> calendars = util.createCalendars(5);
+		List<LotteryInfo> lotteryOfDays = lotteryStat.getHistoryData(calendars);
+		List<Stat> stats = pushStat(lotteryOfDays);
+		Map<String, RatioStat> ratioMap = pushRatioState(lotteryOfDays);
 
 		messagingTemplate.convertAndSend("/topic/lotteryInfo", lotteryInfos);
 		messagingTemplate.convertAndSend("/topic/stat", stats);
+		messagingTemplate.convertAndSend("/topic/ratio", ratioMap);
 		System.out.println("推送数据结束");
 		return "callback";
 	}
 
-	public List<Stat> pushStat(){
-
-		List<Calendar> calendars = util.createCalendars(5);
-		List<LotteryInfo> lotteryInfos = lotteryStat.getHistoryData(calendars);
+	public List<Stat> pushStat(List<LotteryInfo> lotteryInfos){
 		List<List<LotteryInfo>> groups = lotteryStat.groupLotterys(lotteryInfos);
 		List<Stat> stats = new ArrayList<>();
 
@@ -76,6 +85,13 @@ public class PushLotteryInfo {
 		}
 
 		return stats;
+	}
+
+	public Map<String, RatioStat> pushRatioState(List<LotteryInfo> lotteryInfos){
+
+		Map<String, RatioStat> map = ratioStat.computeRate(lotteryInfos);
+
+		return map;
 	}
 
 }

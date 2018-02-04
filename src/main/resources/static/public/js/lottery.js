@@ -22,6 +22,13 @@ app.controller('LotteryController', function($scope){
                 $scope.$apply();
             });
 
+            stompClient.subscribe('/topic/ratio', function(result){
+                console.log('subscribe /topic/ratio');
+                $scope.ratioMap = JSON.parse(result.body);
+                console.log($scope.ratioMap);
+                $scope.$apply();
+            });
+
         });
 
     };

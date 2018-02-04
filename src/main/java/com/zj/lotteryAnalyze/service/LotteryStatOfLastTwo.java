@@ -63,7 +63,7 @@ public class LotteryStatOfLastTwo {
 		int tenOddTimes = 0;
 		int unitOddTimes = 0;
 
-		for(int i=0; i<6; i++){
+		for(int i=0; i<lotteryInfos.size(); i++){
 			for(int j=0; j<2; j++){
 				//j==0表示每期彩票中的倒数第二个开奖号码
 				if(j == 0){
@@ -100,7 +100,7 @@ public class LotteryStatOfLastTwo {
 		int sameTimesTen = 0;
 		int sameTimesUnit = 0;
 
-		for(int i=0; i<6; i++){
+		for(int i=0; i<lotteryInfos.size(); i++){
 			for(int j=0; j<2; j++){
 				if(j == 0){
 					int key = lotterys[i][j][1];
@@ -153,7 +153,7 @@ public class LotteryStatOfLastTwo {
 		Set<Integer> unitSet = new HashSet<>();
 		int[] result = new int[2];
 
-		for(int i=0; i<6; i++){
+		for(int i=0; i<lotteryInfos.size(); i++){
 			for(int j=0; j<2; j++){
 				if(j == 0){
 					tenSet.add(lotterys[i][j][1]);
@@ -185,7 +185,7 @@ public class LotteryStatOfLastTwo {
 		int tenTemMaxCon = 1;
 		int unitTemMaxCon = 1;
 
-		for(int i=1; i<6; i++){
+		for(int i=1; i<lotteryInfos.size(); i++){
 			for(int j=0; j<2; j++){
 				if(j == 0){
 					if(lotterys[i][j][1] == lotterys[i-1][j][1]){
@@ -194,7 +194,7 @@ public class LotteryStatOfLastTwo {
 							tenMaxCon = tenTemMaxCon;
 						}
 					}else{
-						tenTemMaxCon = 0;
+						tenTemMaxCon = 1;
 					}
 				}
 				if(j == 1){
@@ -204,7 +204,7 @@ public class LotteryStatOfLastTwo {
 							unitMaxCon = unitTemMaxCon;
 						}
 					}else{
-						unitTemMaxCon = 0;
+						unitTemMaxCon = 1;
 					}
 				}
 			}
@@ -228,7 +228,7 @@ public class LotteryStatOfLastTwo {
 		int unitTen = 0;
 		int[] result = new int[2];
 
-		for(int i=0; i<6; i++){
+		for(int i=0; i<lotteryInfos.size(); i++){
 			for(int j=0; j<2; j++){
 				if(j == 0){
 					sumTen += lotterys[i][j][1];
@@ -345,94 +345,4 @@ public class LotteryStatOfLastTwo {
 		return lastTwoQuinary;
 	}
 
-	/**
-	 * 计算多期彩票中，分组后，按不同的统计方式，每个值在组出现的概率
-	 * @param lotteryInfos
-	 * @return
-	 */
-	public Map<String, RatioStat> computeRate(List<LotteryInfo> lotteryInfos){
-
-		List<List<LotteryInfo>> groups = groupLotterys(lotteryInfos);
-		return null;
-	}
-
-	public RatioStat computeBigNumRate(List<List<LotteryInfo>> groups) {
-
-		int groupSize = groups.size();
-		List<int[]> groupResult = new ArrayList<>();
-		Map<Integer, Integer> tenMap = new HashMap<>();
-		Map<Integer, Integer> unitMap = new HashMap<>();
-		RatioStat ratio = new RatioStat();
-
-		for (List<LotteryInfo> lotteryInfos : groups) {
-			int[] bigNum = countBigNumOfLastTwo(lotteryInfos);
-			groupResult.add(bigNum);
-		}
-		for (int[] result : groupResult) {
-			if (!tenMap.containsKey(result[0])) {
-				tenMap.put(result[0], 1);
-			} else {
-				tenMap.put(result[0], tenMap.get(result[0]) + 1);
-			}
-			if (!unitMap.containsKey(result[0])) {
-				unitMap.put(result[1], 1);
-			} else {
-				unitMap.put(result[1], unitMap.get(result[1]) + 1);
-			}
-		}
-
-		for (int i = 0; i <= 6; i++) {
-			if (tenMap.containsKey(i)) {
-				switch (i) {
-					case 0:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-					case 1:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-					case 2:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-					case 3:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-					case 4:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-					case 5:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-					case 6:
-						ratio.setZeroRateUnit(unitMap.get(i) / groupSize);
-						break;
-				}
-			} else {
-				switch (i) {
-					case 0:
-						ratio.setZeroRateUnit(0);
-						break;
-					case 1:
-						ratio.setZeroRateUnit(0);
-						break;
-					case 2:
-						ratio.setZeroRateUnit(0);
-						break;
-					case 3:
-						ratio.setZeroRateUnit(0);
-						break;
-					case 4:
-						ratio.setZeroRateUnit(0);
-						break;
-					case 5:
-						ratio.setZeroRateUnit(0);
-						break;
-					case 6:
-						ratio.setZeroRateUnit(0);
-						break;
-				}
-			}
-		}
-
-		return ratio;
-	}
 }
