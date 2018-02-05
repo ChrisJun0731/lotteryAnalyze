@@ -1,4 +1,5 @@
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
+import com.zj.lotteryAnalyze.dto.LotteryPredict;
 import com.zj.lotteryAnalyze.service.LotteryStatOfLastTwo;
 import com.zj.lotteryAnalyze.service.NextThreePredict;
 import net.sf.json.JSONArray;
@@ -132,8 +133,9 @@ public class AccuracyTest {
 		}
 
 		NextThreePredict predict = new NextThreePredict(existLotterys);
-		Set<Integer> tenPre = predict.getTenPre();
-		Set<Integer> unitPre = predict.getUnitPre();
+		LotteryPredict lotteryPredict = predict.getLotteryPredict();
+		Set<Integer> tenPre = lotteryPredict.getTenPreSet();
+		Set<Integer> unitPre = lotteryPredict.getUnitPreSet();
 
 		List<int[]> lastTwo = stat.getLastTwoNumber(predictLotterys);
 		Set<Integer> tenValid = new HashSet<>();
@@ -144,17 +146,46 @@ public class AccuracyTest {
 			unitValid.add(last[1]);
 		}
 
+		int tempTenCorrect = tenCorrect;
 		for(Integer tPre: tenPre){
 			if(tenValid.contains(tPre)){
 				tenCorrect++;
 				break;
 			}
 		}
+		if(tempTenCorrect == tenCorrect){
+//			System.out.print("该组彩票预测错误，错误由以下规则引起：");
+//			for(String rule: lotteryPredict.getTenRuleSet()){
+//				System.out.print(rule+ " ");
+//			}
+//			System.out.println();
+		}else{
+			System.out.print("该组彩票预测正确，由下规则引起：");
+			for(String rule: lotteryPredict.getTenRuleSet()){
+				System.out.print(rule+ " ");
+			}
+			System.out.println();
+		}
+
+		int tempUnitCorrect = unitCorrect;
 		for(Integer uPre: unitPre){
 			if(unitValid.contains(uPre)){
 				unitCorrect++;
 				break;
 			}
+		}
+		if(tempUnitCorrect == unitCorrect){
+//			System.out.print("该组彩票预测错误，错误由以下规则引起：");
+//			for(String rule: lotteryPredict.getUnitRuleSet()){
+//				System.out.print(rule+ " ");
+//			}
+//			System.out.println();
+		}else{
+			System.out.print("该组彩票预测正确，由以下规则引起：");
+			for(String rule: lotteryPredict.getUnitRuleSet()){
+				System.out.print(rule+ " ");
+			}
+			System.out.println();
 		}
 
 	}

@@ -1,6 +1,7 @@
 package com.zj.lotteryAnalyze.service;
 
 import com.zj.lotteryAnalyze.dto.LotteryInfo;
+import com.zj.lotteryAnalyze.dto.LotteryPredict;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ public class NextThreePredict {
 
 	private Set<Integer> tenPre;
 	private Set<Integer> unitPre;
+	private LotteryPredict lotteryPredict = new LotteryPredict();
 
 	public NextThreePredict(List<LotteryInfo> existLotteryInfos) {
 		bigNums = stat.countBigNumOfLastTwo(existLotteryInfos);
@@ -52,6 +54,8 @@ public class NextThreePredict {
 		sameConSetTen = new HashSet<>();
 		sameConSetUnit = new HashSet<>();
 
+
+
 		predictByBigNumRule();
 		predictByOddNumRule();
 		predictByMaxSameRule(existLotteryInfos);
@@ -60,6 +64,9 @@ public class NextThreePredict {
 
 		tenPre = intersect(intersect(intersect(intersect(bigNumSetTen, oddNumSetTen), maxSameSetTen), diffNumSetTen), sameConSetTen);
 		unitPre = intersect(intersect(intersect(intersect(bigNumSetUnit, oddNumSetUnit), maxSameSetUnit), diffNumSetUnit), sameConSetUnit);
+
+		lotteryPredict.setTenPreSet(tenPre);
+		lotteryPredict.setUnitPreSet(unitPre);
 	}
 
 	/**
@@ -73,6 +80,7 @@ public class NextThreePredict {
 			bigNumSetTen.add(7);
 			bigNumSetTen.add(8);
 			bigNumSetTen.add(9);
+			lotteryPredict.getTenRuleSet().add("bigNumRule");
 		}
 		if (bigNums[1] < 1) {
 			bigNumSetUnit.add(5);
@@ -80,6 +88,7 @@ public class NextThreePredict {
 			bigNumSetUnit.add(7);
 			bigNumSetUnit.add(8);
 			bigNumSetUnit.add(9);
+			lotteryPredict.getUnitRuleSet().add("bigNumRule");
 		}
 	}
 
@@ -93,12 +102,14 @@ public class NextThreePredict {
 			oddNumSetTen.add(3);
 			oddNumSetTen.add(6);
 			oddNumSetTen.add(8);
+			lotteryPredict.getTenRuleSet().add("oddNumRule");
 		}
 		if (oddNums[1] < 1) {
 			oddNumSetUnit.add(1);
 			oddNumSetUnit.add(3);
 			oddNumSetUnit.add(6);
 			oddNumSetUnit.add(8);
+			lotteryPredict.getUnitRuleSet().add("oddNumRule");
 		}
 	}
 
@@ -112,6 +123,7 @@ public class NextThreePredict {
 				maxSameSetTen.add(unit);
 				maxSameSetTen.add(unit + 5);
 			}
+			lotteryPredict.getTenRuleSet().add("maxSameRule");
 		}
 		if (maxSame[1] < 2) {
 			for (int i = 0; i < existLotteryInfos.size(); i++) {
@@ -119,6 +131,7 @@ public class NextThreePredict {
 				maxSameSetUnit.add(unit);
 				maxSameSetUnit.add(unit + 5);
 			}
+			lotteryPredict.getUnitRuleSet().add("maxSameRule");
 		}
 	}
 
@@ -140,6 +153,7 @@ public class NextThreePredict {
 					diffNumSetTen.add(i + 5);
 				}
 			}
+			lotteryPredict.getTenRuleSet().add("diffNumRule");
 		}
 		if (diffNum[1] < 3) {
 			Set<Integer> setTemp = new HashSet<>();
@@ -153,6 +167,7 @@ public class NextThreePredict {
 					diffNumSetUnit.add(i + 5);
 				}
 			}
+			lotteryPredict.getUnitRuleSet().add("diffNumRule");
 		}
 
 	}
@@ -169,6 +184,7 @@ public class NextThreePredict {
 					sameConSetTen.add(i + 5);
 				}
 			}
+			lotteryPredict.getTenRuleSet().add("sameConRule");
 		}
 		if (sameCon[1] == 3) {
 			int unit = quainary[0][1][1];
@@ -178,6 +194,7 @@ public class NextThreePredict {
 					sameConSetUnit.add(i + 5);
 				}
 			}
+			lotteryPredict.getUnitRuleSet().add("sameConRule");
 		}
 	}
 
@@ -211,15 +228,11 @@ public class NextThreePredict {
 		return tenPre;
 	}
 
-	public void setTenPre(Set<Integer> tenPre) {
-		this.tenPre = tenPre;
+	public LotteryPredict getLotteryPredict() {
+		return lotteryPredict;
 	}
 
-	public Set<Integer> getUnitPre() {
-		return unitPre;
-	}
-
-	public void setUnitPre(Set<Integer> unitPre) {
-		this.unitPre = unitPre;
+	public void setLotteryPredict(LotteryPredict lotteryPredict) {
+		this.lotteryPredict = lotteryPredict;
 	}
 }
