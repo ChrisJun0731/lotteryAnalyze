@@ -5,40 +5,40 @@ package com.zj.lotteryAnalyze.dto;
  */
 public class Income {
 
-	private int tenInput;
-	private int unitInput;
-	private int tenOutput;
-	private int unitOutput;
+	private float tenInput;
+	private float unitInput;
+	private float tenOutput;
+	private float unitOutput;
 
-	public int getTenInput() {
+	public float getTenInput() {
 		return tenInput;
 	}
 
-	public void setTenInput(int tenInput) {
+	public void setTenInput(float tenInput) {
 		this.tenInput = tenInput;
 	}
 
-	public int getUnitInput() {
+	public float getUnitInput() {
 		return unitInput;
 	}
 
-	public void setUnitInput(int unitInput) {
+	public void setUnitInput(float unitInput) {
 		this.unitInput = unitInput;
 	}
 
-	public int getTenOutput() {
+	public float getTenOutput() {
 		return tenOutput;
 	}
 
-	public void setTenOutput(int tenOutput) {
+	public void setTenOutput(float tenOutput) {
 		this.tenOutput = tenOutput;
 	}
 
-	public int getUnitOutput() {
+	public float getUnitOutput() {
 		return unitOutput;
 	}
 
-	public void setUnitOutput(int unitOutput) {
+	public void setUnitOutput(float unitOutput) {
 		this.unitOutput = unitOutput;
 	}
 }

@@ -15,18 +15,18 @@ import java.util.Set;
  */
 public class IncomeSimulate {
 
-	private int price = 2;
-	private int prize;
+	private float price = 2.0f;
+	private float prize = 19.2f;
 	private Accuracy accuracy = new Accuracy();
 
 	public void computeAll(List<List<LotteryInfo>> groups){
 
-		int tenInputAll = 0;
-		int unitInputAll = 0;
-		int tenOutputAll = 0;
-		int unitOutputAll = 0;
-		int tenPrizeRatio = 0;
-		int unitPrizeRatio = 0;
+		float tenInputAll = 0;
+		float unitInputAll = 0;
+		float tenOutputAll = 0;
+		float unitOutputAll = 0;
+		float tenPrizeRatio = 0;
+		float unitPrizeRatio = 0;
 
 
 		for(List<LotteryInfo> group: groups){
@@ -40,8 +40,8 @@ public class IncomeSimulate {
 		tenPrizeRatio = (tenOutputAll - tenInputAll)/tenInputAll;
 		unitPrizeRatio = (unitOutputAll - unitInputAll)/unitInputAll;
 
-		System.out.println("投资"+groups.size()+"组产生的十位胆拖收益为"+ tenOutputAll+",收益率为:"+ tenPrizeRatio);
-		System.out.println("投资"+groups.size()+"组产生的个位胆拖收益为"+ unitOutputAll+",收益率为:"+ unitPrizeRatio);
+		System.out.println("投资"+groups.size()+"组产生的十位胆拖收益为"+ tenOutputAll+"总投入为："+tenInputAll+",收益率为:"+ tenPrizeRatio);
+		System.out.println("投资"+groups.size()+"组产生的个位胆拖收益为"+ unitOutputAll+"总投入为："+unitInputAll+",收益率为:"+ unitPrizeRatio);
 
 	}
 
@@ -61,9 +61,9 @@ public class IncomeSimulate {
 		NextThreePredict predict = new NextThreePredict(existLotterys);
 		LotteryPredict lotteryPredict = predict.getLotteryPredict();
 
-		int inputTen = price * lotteryPredict.getTenPreSet().size();
-		int inputUnit = price * lotteryPredict.getUnitPreSet().size();
-		income.setTenOutput(inputTen);
+		float inputTen = price * lotteryPredict.getTenPreSet().size();
+		float inputUnit = price * lotteryPredict.getUnitPreSet().size();
+		income.setTenInput(inputTen);
 		income.setUnitInput(inputUnit);
 		PredictResult result = accuracy.predictCorrect(lotteryInfos);
 
